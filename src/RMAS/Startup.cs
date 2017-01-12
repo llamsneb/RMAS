@@ -42,9 +42,14 @@ namespace RMAS
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Probably unnecessary as it is the same as default db connection below.
+            var connection = @"Server=Ben-PC;Database=RMAS_db;Trusted_Connection=True;";
+            services.AddDbContext<RMAS_dbContext>(options => options.UseSqlServer(connection));
+
             // Add framework services.
             services.AddApplicationInsightsTelemetry(Configuration);
 
+            // Default db connection set in appsettings.json.
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
