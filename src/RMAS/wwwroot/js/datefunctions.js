@@ -24,24 +24,42 @@ $(function() {
 					prevSun.setDate(prevSun.getDate() - d);								
 					document.getElementById("date").value = boxDate(prevSun);
 					
-					document.getElementById("sun").value = sqlDate(prevSun);
+					document.getElementById("Sun").value = sqlDate(prevSun);
 					prevSun.setDate(prevSun.getDate() + 1);
-					document.getElementById("mon").value = sqlDate(prevSun);
+					document.getElementById("Mon").value = sqlDate(prevSun);
 					prevSun.setDate(prevSun.getDate() + 1);
-					document.getElementById("tues").value = sqlDate(prevSun);
+					document.getElementById("Tues").value = sqlDate(prevSun);
 					prevSun.setDate(prevSun.getDate() + 1);
-					document.getElementById("wed").value = sqlDate(prevSun);
+					document.getElementById("Wed").value = sqlDate(prevSun);
 					prevSun.setDate(prevSun.getDate() + 1);
-					document.getElementById("thur").value = sqlDate(prevSun);
+					document.getElementById("Thur").value = sqlDate(prevSun);
 					prevSun.setDate(prevSun.getDate() + 1);
-					document.getElementById("fri").value = sqlDate(prevSun);
+					document.getElementById("Fri").value = sqlDate(prevSun);
 					prevSun.setDate(prevSun.getDate() + 1);
-					document.getElementById("sat").value = sqlDate(prevSun);								
-					}
-			});
-});
+					document.getElementById("Sat").value = sqlDate(prevSun);								
+			}
+	});
 
-//  Ajax JavaScript code for the RMAS-reservation-availability.html document
+
+	//function modifyDatesList() {
+	//    var dates = new Array();
+	//    for (i = 0; i < ids.length; i++) {
+	//        if ($("#" + ids[i].toString() + ".cb").is(':checked')) {
+	//            dates.push(ids[i]);
+	//        }
+	//    }
+	//    console.log(dates.toString());
+	//    $("#str").val(dates.toString());
+	//}
+
+
+
+	$('#RoomType').change(
+        function () {
+            getRooms(this.value)
+        }
+    );
+});
 
 /********************************************************/
 // function getRooms
@@ -56,22 +74,22 @@ $(function() {
 
 // Ajax function. Calls php function that populates dropdown of all room numbers for selected RoomType.
 function getRooms(roomType) {
-    var jqxhr = $.ajax("example.php")
-      .success(function () {
-          document.getElementById("roomNumber").innerHTML = xhr.responseText;
-      });
+    let jqxhr = $.ajax({
+        type: "POST",
+        url: "/Reserve/GetRooms",
+        data: {'roomType': roomType},
+        //contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: (function (response) {
+            let select = document.getElementById("RoomNumber");
 
+            for (let i = select.options.length; i >= 0; i--) {
+                select.remove(i);
+            }
 
-
-    //var xhr = new XMLHttpRequest();
-
-	//// Register the embedded handler function
-	//xhr.onreadystatechange = function () {
-	//    if (xhr.readyState == 4 && xhr.status == 200) {
-	//	    document.getElementById("roomNumber").innerHTML = xhr.responseText;
-	//    }
-		
-	//}
-	//xhr.open("GET", "getRooms.php?roomType=" + roomType);
-	//xhr.send(null);
+            response.forEach(function (num) {
+                select.options.add(new Option(num));
+            })
+        })
+    });
 }

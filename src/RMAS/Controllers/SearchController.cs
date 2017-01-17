@@ -3,19 +3,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
 using RMAS.Models;
+using RMAS.Models.SearchViewModels;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace RMAS.Controllers
 {
-    public class EventController : Controller
+    public class SearchController : Controller
     {
         private RMAS_dbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public EventController(RMAS_dbContext context)
+        public SearchController(RMAS_dbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: /<controller>/
@@ -24,23 +28,22 @@ namespace RMAS.Controllers
             return View();
         }
 
-        public IActionResult Reserve()
+        public IActionResult Search()
         {
-            return View();
+            SearchViewModel model = new SearchViewModel();
+            return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Reserve(Event eventObj)
+        public IActionResult Search(SearchViewModel model)
         {
             if (ModelState.IsValid)
             {
-                _context.Event.Add(eventObj);
-                _context.SaveChanges();
-                return RedirectToAction("Reserve");
+                
             }
 
-            return View(eventObj);
+            return View(model);
         }
     }
 }
