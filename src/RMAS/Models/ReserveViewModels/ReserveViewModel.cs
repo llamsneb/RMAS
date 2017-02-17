@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.ComponentModel.DataAnnotations;
+using RMAS.Models.Validation;
 
 namespace RMAS.Models.ReserveViewModels
 {
+    [ValidateReserveTime]
     public class ReserveViewModel
     {
         public List<SelectListItem>
@@ -68,13 +71,20 @@ namespace RMAS.Models.ReserveViewModels
             new SelectListItem { Value = "19:00", Text = "7:00pm" },
             new SelectListItem { Value = "20:00", Text = "8:00pm" }
         };
-
+        
+        [ValidateReserveDate]
         public List<DateTime> Dates { get; set; }
 
+        [Required]
         public string EventName { get; set; }
-        public DateTime EventDate { get; set; }
+        
+        [Required]
         public TimeSpan BeginTime { get; set; }
+
+        [Required]
         public TimeSpan EndTime { get; set; }
+
+        [Required]
         public int RoomNumber { get; set; }
     }
 }

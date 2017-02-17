@@ -48,3 +48,24 @@ textarea {
     display: none
   }
 }
+
+/* Custom Styles */
+body{
+    background-image: url("/images/conference-room-bg4.jpg");
+    background-size: cover;
+}
+
+.bg-transparent{
+	padding: 10px;
+	background-color: #2F3032;
+	background: rgba(0, 0, 0, 0.8);
+	margin: 20px 0 40px;	
+}
+
+.rmas{
+    color: white;
+}
+
+.navbar-brand{
+    font-size: 36px;
+}

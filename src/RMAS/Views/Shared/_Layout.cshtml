@@ -32,16 +32,22 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
+                    @if (await AuthorizationService.AuthorizeAsync(User, "Authenticated"))
+                    {
+                        <li><a asp-area="" asp-controller="Reserve" asp-action="Reserve">Reserve</a></li>
+                        <li><a asp-area="" asp-controller="Search" asp-action="Search">Search</a></li>
+                    }
                 </ul>
                 @await Html.PartialAsync("_LoginPartial")
             </div>
         </div>
     </div>
     <div class="container body-content">
-        @RenderBody()
+        <div class="row bg-transparent rmas">
+            @RenderBody()
+        </div>
         <hr />
         <footer>
             <p>&copy; 2016 - RMAS</p>

@@ -6,30 +6,67 @@
 
 <h2>@ViewData["Title"]</h2>
 
-<div class="row">
-    <div class="span2">
-    </div>
-    <div class="span8 background-box">
-        <div class="div-form">
+<form asp-controller="Search" asp-action="Search" method="post" role="form">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="col-md-4">
+        <div class="row">
             <h3>Search for Scheduled Event</h3>
-            <form asp-controller="Search" asp-action="Search" method="post" class="form-horizontal" role="form">
-                <div class="block-display">
-                    <div class="block-display">
-                        <label asp-for="EventName">Search by Event Name:</label> 
-                        <input asp-for="EventName" class="width-double" type="search" />
-                    </div>
-                    <div class="block-display">And &#47; Or</div>
-                    <div class="block-display">
-                        <label asp-for="EventDate">Search by Date (MM/DD/YYYY):</label> 
-                        <input asp-for="EventDate" type="date" />
-                    </div>
-                    <div class="block-display">
-                        <button type="submit">Search</button>
-                    </div>
-                </div>
-            </form>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <label asp-for="EventName">Search by Event Name:</label>
+                <span asp-validation-for="EventName"></span>
+                <input asp-for="EventName" class="form-control" type="search" />
+            </div>
+        </div>
+        <div class="row">
+            <p>And &#47; Or</p>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <label asp-for="EventDate">Search by Date (MM/DD/YYYY):</label>
+                <span asp-validation-for="EventDate"></span>
+                <input class="form-control" asp-for="EventDate" type="date" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <button class="btn btn-primary" type="submit">Search</button>
+            </div>
         </div>
     </div>
-    <div class="span2">
+</form>
+
+@if (Model.SearchResults != null)
+{
+    <div class="col-md-8">
+        <h3>Search Results</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Event Name</th>
+                    <th>Room Number</th>
+                    <th>Date</th>
+                    <th>Begin Time</th>
+                    <th>End Time</th>
+                </tr>
+            </thead>
+            <tbody>                            
+                @foreach (Event result in Model.SearchResults)
+                {
+                    <tr>
+                        <td>@result.EventName</td>
+                        <td>@result.RoomNumber</td>
+                        <td>@result.EventDate</td>
+                        <td>@result.BeginTime</td>
+                        <td>@result.EndTime</td>
+                    </tr>
+                }                                    
+            </tbody>
+        </table>
     </div>
-</div>	
+}
+
+@section Scripts {
+
+}

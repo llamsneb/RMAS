@@ -1,81 +1,96 @@
 ﻿@model ReserveViewModel
 @{
-ViewBag.Title = "Reserve";
-//ViewData["Title"] = "Reserve";
+    ViewBag.Title = "Reserve";
+    //ViewData["Title"] = "Reserve";
 }
 
 <h2>@ViewData["Title"]</h2>
 
-<form asp-controller="Reserve" asp-action="Reserve" method="post" class="form-horizontal" role="form">
-    <div class="inline-display">
-        <p>Pick a Week:</p>
-        <div><input class="datePick" type="text" name="date" id="date" onfocus="this.blur();"></div>
-        <div class="calendar" id="datepicker"></div>
-    </div>
-    <div class="block-display">
-        <div class="inline-display">
-            <label for="RoomType">Room Type:</label>
-            <select id="RoomType" asp-items="Model.RoomTypes" >
-                <option value=""></option>
-            </select>
-        </div>
-        <div class="inline-display">
-            <label asp-for="RoomNumber">Room Number:</label>
-            <select asp-for="RoomNumber"></select>
-        </div>
-    </div>
-    <div class="block-display" id="days-align">
-        <p>Select Days to Reserve:</p>
-        @foreach (var day in Model.DaysOfWeek)
-        {
-            <div class="chkboxes">
-                <label>
-                    <input class="chkwidth" type="checkbox" name="Dates" id="@day.Text">@day.Text
-                </label>
-            </div>
-        }   
-    </div>
-    <div class="block-display">
-        <div class="inline-display">
-            <label asp-for="BeginTime">Begin Time:</label>
-            <select asp-for="BeginTime" id="RoomType" asp-items="Model.BeginTimeList">
-                <option value="">Select Time</option>
-            </select>
-        </div>
-        <div class="inline-display">
-            <label asp-for="EndTime">End Time:</label>
-            <select asp-for="EndTime" id="RoomType" asp-items="Model.EndTimeList">
-                <option value="">Select Time</option>
-            </select>
-        </div>
-        <div class="block-display">
-            <label asp-for="EventName">Event Name:</label> 
-            <input asp-for="EventName" class="width-double" type="text" />
-        </div>
-        <div id="submit-button"><button type="submit">Reserve</button></div>
-    </div>
-
-
-
-
-
-    <div class="form-horizontal">
-        <div asp-validation-summary="All" class="text-danger"></div>
-        <div class="form-group">
-            @*<label asp-for="Url" class="col-md-2 control-label"></label>*@
-            <div class="col-md-10">
-                @*<input asp-for="Url" class="form-control" />*@
-                @*<span asp-validation-for="Url" class="text-danger"></span>*@
+<form asp-controller="Reserve" asp-action="Reserve" method="post" role="form">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="col-md-3 ">
+        <div class="row">
+            <div class="form-group">
+                <label for="date">Pick a Week:</label>
+                <input class="form-control" type="text" name="date" id="date" onfocus="this.blur();">
             </div>
         </div>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+        <div class="row">
+            <div>
+                <div class="calendar" id="datepicker"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-9">
+        <div class="row">
+            <div class="col-md-2 form-inline">
+                <div class="form-group">
+                    <label for="RoomType">Room Type:</label>
+                    <select class="form-control" id="RoomType" asp-items="Model.RoomTypes">
+                        <option value=""></option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-2 form-inline">
+                <div class="form-group">
+                    <label asp-for="RoomNumber">Room Number:</label>
+                    <select class="form-control" asp-for="RoomNumber"></select>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-7">
+                <div class="form-group">
+                    <h5>Select Days to Reserve:</h5>
+                    @foreach (var day in Model.DaysOfWeek)
+                    {
+                        <div class="checkbox-inline">
+                            <label>
+                                <input type="checkbox" name="Dates" id="@day.Text">@day.Text
+                            </label>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2 form-inline">
+                <div class="form-group">
+                    <label asp-for="BeginTime">Begin Time:</label>
+                    <select asp-for="BeginTime" class="form-control" id="RoomType" asp-items="Model.BeginTimeList">
+                        <option value="">Select Time</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-2 form-inline">
+                <div class="form-group">
+                    <label asp-for="EndTime">End Time:</label>
+                    <select asp-for="EndTime" class="form-control" id="RoomType" asp-items="Model.EndTimeList">
+                        <option value="">Select Time</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="EventName">Event Name:</label>
+                    <input asp-for="EventName" class="form-control" type="text" />
+                </div>                        
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-1">
+                <div class="form-group">
+                    <button class="btn btn-primary" type="submit">Reserve</button>
+                </div>
             </div>
         </div>
     </div>
 </form>
 
+
+
 @section Scripts {
-    <script src="~/js/datefunctions.js"></script>
+    <script src="~/js/date-module.js"></script>
 }

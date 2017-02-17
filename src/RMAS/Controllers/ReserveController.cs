@@ -3,22 +3,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using RMAS.Models;
 using RMAS.Models.ReserveViewModels;
+using RMAS.Interfaces;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace RMAS.Controllers
 {
+    [Authorize]
     public class ReserveController : Controller
     {
-        private RMAS_dbContext _context;
+        private readonly IEventRepository _eventRepository;
+        private readonly IRoomRepository _roomRepository;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public ReserveController(RMAS_dbContext context, UserManager<ApplicationUser> userManager)
+        public ReserveController(IEventRepository eventRepository, IRoomRepository roomRepository, UserManager<ApplicationUser> userManager)
         {
-            _context = context;
+            _eventRepository = eventRepository;
+            _roomRepository = roomRepository;
             _userManager = userManager;
         }
 
@@ -40,6 +45,7 @@ namespace RMAS.Controllers
         {
             if (ModelState.IsValid)
             {
+                List<Event> eventList = new List<Event>();
                 foreach (DateTime date in model.Dates)
                 {
                     Event evt = new Event();
@@ -50,9 +56,10 @@ namespace RMAS.Controllers
                     evt.BeginTime = TimeSpan.Parse(model.BeginTime.ToString());
                     evt.EndTime = TimeSpan.Parse(model.EndTime.ToString());
 
-                    _context.Event.Add(evt);
+                    eventList.Add(evt);
                 }
-                _context.SaveChanges();
+
+                _eventRepository.AddEvents(eventList);
                 return RedirectToAction("Reserve");
             }
 
@@ -63,7 +70,7 @@ namespace RMAS.Controllers
         //[ValidateAntiForgeryToken]
         public JsonResult GetRooms(string roomType)
         {
-            var RoomNumbers = _context.Room.Where(r => r.RoomType == roomType).Select(r => r.RoomNumber).ToList();
+            var RoomNumbers = _roomRepository.GetRoomNumbers(roomType);
             return Json(RoomNumbers);
         }
     }
