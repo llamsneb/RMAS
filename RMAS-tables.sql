@@ -1,9 +1,15 @@
 USE RMAS_db  
 GO
 
+DROP TABLE [dbo].[Event]
+GO
+
+DROP TABLE [dbo].[Room]
+GO
+
 CREATE TABLE dbo.Room  
 (
-	RoomNumber int PRIMARY KEY NOT NULL IDENTITY(1,1),  
+	RoomNumber int PRIMARY KEY NOT NULL, --For auto increment uncomment: IDENTITY(1,1),  
 	RoomType varchar(45) NOT NULL
 )  
 GO  
@@ -21,3 +27,5 @@ CREATE TABLE dbo.Event
   CONSTRAINT UserId FOREIGN KEY (UserId) REFERENCES AspNetUsers (Id) ON DELETE CASCADE ON UPDATE CASCADE
 ) 
 GO
+
+
