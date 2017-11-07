@@ -39,42 +39,42 @@ namespace RMAS.Controllers
             return View(model);
         }
 
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public IActionResult Search(SearchViewModel model)
-        //{
-        //    if (ModelState.IsValid)
-        //    {                
-        //        model.SearchResults = _eventRepository.GetEvents(model.EventName, model.EventDate);
-        //    }
-        //    return View(model);
-        //}
-
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Search(SearchViewModel model)
+        public IActionResult Search(SearchViewModel model)
         {
             if (ModelState.IsValid)
             {
-                //If not making web service call uncomment this line:
-                //model.SearchResults = _eventRepository.GetEvents(model.EventName, model.EventDate);
-
-                var dateFormated = model.EventDate.HasValue ? model.EventDate.Value.Date.ToString("yyyy-MM-dd") : null;
-                var nameFormated = String.IsNullOrEmpty(model.EventName) ? null : model.EventName + "/";
-                string requestUri = "api/event/" + nameFormated + dateFormated;
-
-                HttpClient client = new HttpClient();
-                client.BaseAddress = new Uri("http://localhost:5000/");
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                HttpResponseMessage response = await client.GetAsync(requestUri);
-                if (response.IsSuccessStatusCode)
-                {
-                    model.SearchResults = JsonConvert.DeserializeObject<List<Event>>(await response.Content.ReadAsStringAsync());
-                }
+                model.SearchResults = _eventRepository.GetEvents(model.EventName, model.EventDate);
             }
             return View(model);
         }
+
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Search(SearchViewModel model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        //If not making web service call uncomment this line:
+        //        //model.SearchResults = _eventRepository.GetEvents(model.EventName, model.EventDate);
+
+        //        var dateFormated = model.EventDate.HasValue ? model.EventDate.Value.Date.ToString("yyyy-MM-dd") : null;
+        //        var nameFormated = String.IsNullOrEmpty(model.EventName) ? null : model.EventName + "/";
+        //        string requestUri = "api/event/" + nameFormated + dateFormated;
+
+        //        HttpClient client = new HttpClient();
+        //        client.BaseAddress = new Uri("http://localhost:5000/");
+        //        client.DefaultRequestHeaders.Accept.Clear();
+        //        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+        //        HttpResponseMessage response = await client.GetAsync(requestUri);
+        //        if (response.IsSuccessStatusCode)
+        //        {
+        //            model.SearchResults = JsonConvert.DeserializeObject<List<Event>>(await response.Content.ReadAsStringAsync());
+        //        }
+        //    }
+        //    return View(model);
+        //}
     }
 }
