@@ -46,7 +46,7 @@ namespace RMAS
         {
             // Probably unnecessary as it is the same as default db connection below.
             //var connection = @"Server=Ben-PC;Database=RMAS_db;Trusted_Connection=True;";
-            var connection = @"Server=tcp:rmasdbserver.database.windows.net,1433;Initial Catalog=RMAS_db;Persist Security Info=False;User ID=dbadmin;Password=E1ectrik;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+            var connection = @"Server=tcp:rmasdbserver.database.windows.net,1433;Initial Catalog=RMAS_db;Persist Security Info=False;User ID=dbadmin;Password=Rmasdb01;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
             services.AddDbContext<RMAS_dbContext>(options => options.UseSqlServer(connection));
 
             // Add framework services.
