@@ -6,13 +6,6 @@ namespace RMAS.Models
 {
     public partial class RMAS_dbContext : DbContext
     {
-        // Moved to Startup.cs
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-        //    optionsBuilder.UseSqlServer(@"Server=Ben-PC;Database=RMAS_db;Trusted_Connection=True;");
-        //}
-
         public RMAS_dbContext(DbContextOptions<RMAS_dbContext> options)
         : base(options)
         { }
