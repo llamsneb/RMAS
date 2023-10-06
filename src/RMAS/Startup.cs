@@ -15,8 +15,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using RMAS.Data;
 using RMAS.Models;
-using RMAS.Services;
 using RMAS.Interfaces;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace RMAS
 {
@@ -39,7 +39,7 @@ namespace RMAS
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connection));
 
             // Add framework services.
-            services.AddIdentity<ApplicationUser, IdentityRole>()
+            services.AddDefaultIdentity<ApplicationUser>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
@@ -54,8 +54,11 @@ namespace RMAS
 
 
             // Add application services.
-            services.AddTransient<IEmailSender, AuthMessageSender>();
-            services.AddTransient<ISmsSender, AuthMessageSender>();
+            //services.AddTransient<IEmailSender, AuthMessageSender>();
+            //services.AddTransient<ISmsSender, AuthMessageSender>();
+            // Register no-op EmailSender used by account confirmation and password reset 
+            // during development
+            //services.AddSingleton<IEmailSender, EmailSender>();
             services.AddScoped<IEventRepository, EventRepository>();
             services.AddScoped<IRoomRepository, RoomRepository>();
 

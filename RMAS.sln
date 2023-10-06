@@ -1,11 +1,14 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26430.13
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33829.357
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{C4B8920A-DDBF-4657-A7F1-38CCF518260D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DC6711E9-C261-4D69-9699-B21F4C213A47}"
+	ProjectSection(SolutionItems) = preProject
+		src\RMAS\Data\RMAS_dbContext.cs = src\RMAS\Data\RMAS_dbContext.cs
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RMAS", "src\RMAS\RMAS.csproj", "{5974D91F-2DD2-4ED0-83AA-AF0769058B51}"
 EndProject
@@ -25,5 +28,8 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{5974D91F-2DD2-4ED0-83AA-AF0769058B51} = {C4B8920A-DDBF-4657-A7F1-38CCF518260D}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {967509DA-9785-4205-A033-4D62B732A689}
 	EndGlobalSection
 EndGlobal
