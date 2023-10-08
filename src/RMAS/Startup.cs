@@ -8,11 +8,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Hosting;
 using RMAS.Data;
 using RMAS.Models;
 using RMAS.Interfaces;
@@ -27,6 +27,8 @@ namespace RMAS
             Configuration = configuration;
         }
 
+        static readonly string _RequireAuthenticatedUserPolicy = "Authenticated";
+
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -39,18 +41,20 @@ namespace RMAS
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connection));
 
             // Add framework services.
-            services.AddDefaultIdentity<ApplicationUser>()
+            services.AddDefaultIdentity<ApplicationUser>(
+                    options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.Configure<CookiePolicyOptions>(options =>
-            {
-                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-                options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = SameSiteMode.None;
-            });
+            //services.Configure<CookiePolicyOptions>(options =>
+            //{
+            //    // This lambda determines whether user consent for non-essential cookies is needed for a given request.
+            //    options.CheckConsentNeeded = context => true;
+            //    options.MinimumSameSitePolicy = SameSiteMode.None;
+            //});
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddControllersWithViews();
+            services.AddRazorPages();//.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
 
             // Add application services.
@@ -63,18 +67,13 @@ namespace RMAS
             services.AddScoped<IRoomRepository, RoomRepository>();
 
             // Configure authorization
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("Authenticated", policy => policy.RequireAuthenticatedUser());
-            });
+            services.AddAuthorization(options => options.AddPolicy(_RequireAuthenticatedUserPolicy,
+                        builder => builder.RequireAuthenticatedUser()));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
-        {
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
-
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        {            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -88,18 +87,21 @@ namespace RMAS
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
+            app.UseRouting();
             app.UseAuthentication();
-            app.UseCookiePolicy();
+            app.UseAuthorization();
+            //app.UseCookiePolicy();
             // If the app uses Session or TempData based on Session:
             // app.UseSession();
 
             // Add external authentication middleware below. To configure them please see http://go.microsoft.com/fwlink/?LinkID=532715
 
-            app.UseMvc(routes =>
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                //MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}")
+                endpoints.MapDefaultControllerRoute().RequireAuthorization(_RequireAuthenticatedUserPolicy);
+                endpoints.MapRazorPages();
             });
         }
     }
