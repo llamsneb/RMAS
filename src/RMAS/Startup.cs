@@ -39,6 +39,7 @@ namespace RMAS
             var connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<RMAS_dbContext>(options => options.UseSqlServer(connection));
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connection));
+            services.AddDatabaseDeveloperPageExceptionFilter();
 
             // Add framework services.
             services.AddDefaultIdentity<ApplicationUser>(
@@ -77,11 +78,12 @@ namespace RMAS
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
+                app.UseMigrationsEndPoint();
             }
             else
             {
                 app.UseExceptionHandler("/Home/Error");
+                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
