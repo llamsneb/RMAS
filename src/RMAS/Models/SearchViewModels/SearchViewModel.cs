@@ -14,6 +14,6 @@ namespace RMAS.Models.SearchViewModels
 
         [ValidateSearchDate]
         public DateTime? EventDate { get; set; }
-        public List<Event> SearchResults { get; set; }
+        public List<Event>? SearchResults { get; set; }
     }
 }
