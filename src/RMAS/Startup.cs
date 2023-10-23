@@ -67,6 +67,17 @@ namespace RMAS
             services.AddScoped<IEventRepository, EventRepository>();
             services.AddScoped<IRoomRepository, RoomRepository>();
 
+            string? environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            bool isDevelopment = environment == Environments.Development;
+            services.AddWebOptimizer(pipeline =>
+            {
+                if (!isDevelopment)
+                {
+                    pipeline.MinifyCssFiles();
+                    pipeline.MinifyJsFiles();
+                }
+            });
+
             // Configure authorization
             services.AddAuthorization(options => options.AddPolicy(_RequireAuthenticatedUserPolicy,
                         builder => builder.RequireAuthenticatedUser()));
@@ -77,7 +88,6 @@ namespace RMAS
         {            
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
                 app.UseMigrationsEndPoint();
             }
             else
