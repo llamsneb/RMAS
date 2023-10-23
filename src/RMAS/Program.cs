@@ -1,15 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using RMAS.Data;
 using RMAS.Interfaces;
 using RMAS.Models;
@@ -87,25 +77,6 @@ namespace RMAS
             app.MapRazorPages();
 
             app.Run();
-
-            //CreateHostBuilder(args).Build().Run();
-        }
-
-        //public static IHostBuilder CreateHostBuilder(string[] args) =>
-        //    Host.CreateDefaultBuilder(args)
-        //        .ConfigureWebHostDefaults(webBuilder =>
-        //            {
-        //                webBuilder.ConfigureKestrel(serverOptions =>
-        //                {
-        //                    // Set properties and call methods on options
-        //                })
-        //                .UseStartup<Startup>()
-        //                .ConfigureLogging((hostingContext, logging) =>
-        //                {
-        //                    logging.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
-        //                    logging.AddConsole();
-        //                    logging.AddDebug();
-        //                });
-        //            });
+        }        
     }
 }
