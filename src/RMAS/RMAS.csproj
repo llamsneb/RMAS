@@ -2,25 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp6.0</TargetFramework>
-    <!--PreserveCompilationContext>true</PreserveCompilationContext-->
     <AssemblyName>RMAS</AssemblyName>
-    <!--OutputType>Exe</OutputType-->
     <PackageId>RMAS</PackageId>
     <UserSecretsId>aspnet-RMAS-95a8868c-590d-4ca7-8bd5-f62641126c77</UserSecretsId>
-    <!--RuntimeIdentifiers>win10-x64</RuntimeIdentifiers-->
-    <!--RuntimeFrameworkVersion>6.0.20</RuntimeFrameworkVersion-->
-    <!--AssetTargetFallback>$(AssetTargetFallback);dotnet5.6;portable-net45+win8</AssetTargetFallback-->
-    <!--CopyRefAssembliesToPublishDirectory>true</CopyRefAssembliesToPublishDirectory-->
-    <!--AddRazorSupportForMvc>true</AddRazorSupportForMvc-->
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
-
-  <!--ItemGroup>
-    <None Update="wwwroot\**\*">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </None>
-  </ItemGroup-->
 
   <ItemGroup>
     <PackageReference Include="LigerShark.WebOptimizer.Core" Version="3.0.396" />
@@ -31,19 +18,8 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" Version="2.2.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.4" PrivateAssets="All" />
-    <!--PackageReference Include="BundlerMinifier.Core" Version="2.2.306" /-->
     <PackageReference Include="jQuery" Version="3.1.1" />
     <!--PackageReference Include="Newtonsoft.Json" Version="9.0.1" /-->
-  </ItemGroup>
-
-  <!--Target Name="PrepublishScript" BeforeTargets="PrepareForPublish">
-    <Exec Command="bower install" />
-    <Exec Command="dotnet bundle" />
-  </Target-->
-
-  <ItemGroup>
-    <!--DotNetCliToolReference Include="BundlerMinifier.Core" Version="2.2.301" /-->
-    <!--DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.0" /-->
   </ItemGroup>
 
   <ItemGroup>
