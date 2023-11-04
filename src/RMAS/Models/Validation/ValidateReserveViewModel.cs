@@ -11,12 +11,12 @@ namespace RMAS.Models.Validation
     {
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            var list = value as IList<DateTime>;
+            var list = value as IList<DateOnly>;
             if (list != null)
             {
-                foreach (DateTime date in list)
+                foreach (DateOnly date in list)
                 {
-                    if ((DateTime)date < DateTime.Today || (DateTime)date > Convert.ToDateTime("12/31/9999"))
+                    if ((DateOnly)date < DateOnly.FromDateTime(DateTime.Now) || (DateOnly)date > DateOnly.MaxValue)
                     {
                         return new ValidationResult("Date is not in given range.");
                     }

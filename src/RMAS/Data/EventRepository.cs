@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using RMAS.Interfaces;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace RMAS.Models
 {
@@ -14,29 +16,54 @@ namespace RMAS.Models
             _dbContext = dbContext;
         }
 
-        public List<Event> GetEvents(string eventName = null, DateTime ? date = null)
+        public async Task<List<Event>> GetEvents(string eventName)
         {
-            List<Event> searchResults;
-            if (date == null || date == DateTime.MinValue)
-            {
-                searchResults = _dbContext.Event.Where(e => e.EventName == eventName).ToList();
-            }
-            else if (eventName == null || eventName == "")
-            {
-                searchResults = _dbContext.Event.Where(e => e.EventDate == date).ToList();
-            }
-            else
-            {
-                searchResults = _dbContext.Event.Where(e => e.EventName == eventName && e.EventDate == date).ToList();
-            }
-
-            return searchResults;
+            return await _dbContext.Event.Where(e => e.EventName == eventName).ToListAsync();           
         }
 
-        public void AddEvents(List<Event> eventList)
+        public async Task<List<Event>> GetEvents(DateOnly? date)
         {
-            _dbContext.Event.AddRange(eventList);
-            _dbContext.SaveChanges();
-        }        
+            return await _dbContext.Event.Where(e => e.EventDate == date).ToListAsync();
+        }
+
+        public async Task<List<Event>> GetEvents(string eventName, DateOnly? date)
+        {
+            return await _dbContext.Event.Where(e => e.EventName == eventName && e.EventDate == date).ToListAsync();
+        }
+
+        public async Task<List<Event>> GetEvents(int roomNumber, TimeSpan beginTime, TimeSpan endTime, List<DateOnly> dates)
+        {
+            return await _dbContext.Event.Where(e => e.RoomNumber == roomNumber && (e.BeginTime >= beginTime && e.EndTime <= endTime) && dates.Contains(e.EventDate)).ToListAsync();
+        }
+
+        public async Task AddEvents(List<Event> eventList)
+        {
+            await _dbContext.Event.AddRangeAsync(eventList);
+        }
+
+        public async Task Save()
+        {
+            await _dbContext.SaveChangesAsync();
+        }
+
+        private bool disposed = false;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!this.disposed)
+            {
+                if (disposing)
+                {
+                    _dbContext.Dispose();
+                }
+            }
+            this.disposed = true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
     }
 }

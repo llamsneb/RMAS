@@ -6,7 +6,7 @@ namespace RMAS.Models
     public partial class Event
     {
         public string EventName { get; set; }
-        public DateTime EventDate { get; set; }
+        public DateOnly EventDate { get; set; }
         public TimeSpan BeginTime { get; set; }
         public TimeSpan EndTime { get; set; }
         public int RoomNumber { get; set; }

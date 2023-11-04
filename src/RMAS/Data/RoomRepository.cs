@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using RMAS.Interfaces;
 
 namespace RMAS.Models
@@ -14,9 +15,9 @@ namespace RMAS.Models
             _dbContext = dbContext;
         }
 
-        public List<int> GetRoomNumbers(string roomType)
+        public async Task<List<Room>> GetRooms()
         {
-            return _dbContext.Room.Where(r => r.RoomType == roomType).Select(r => r.RoomNumber).ToList();
+            return await _dbContext.Room.ToListAsync();
         }
     }
 }

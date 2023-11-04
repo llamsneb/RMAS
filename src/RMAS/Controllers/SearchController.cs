@@ -12,6 +12,9 @@ using RMAS.Models;
 using RMAS.Models.SearchViewModels;
 using RMAS.Interfaces;
 using Newtonsoft.Json;
+using Microsoft.EntityFrameworkCore;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using Microsoft.IdentityModel.Tokens;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -41,11 +44,22 @@ namespace RMAS.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Search(SearchViewModel model)
+        public async Task<IActionResult> Search(SearchViewModel model)
         {
             if (ModelState.IsValid)
             {
-                model.SearchResults = _eventRepository.GetEvents(model.EventName, model.EventDate);
+                if (!model.EventName.IsNullOrEmpty() && model.EventDate.HasValue)
+                {
+                    model.SearchResults = await _eventRepository.GetEvents(model.EventName, model.EventDate);
+                }
+                else if(!model.EventName.IsNullOrEmpty())
+                {
+                    model.SearchResults = await _eventRepository.GetEvents(model.EventName);
+                }
+                else if (model.EventDate.HasValue)
+                {
+                    model.SearchResults = await _eventRepository.GetEvents(model.EventDate);
+                }                
             }
             return View(model);
         }

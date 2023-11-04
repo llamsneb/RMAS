@@ -10,7 +10,7 @@ namespace RMAS.Models.Validation
     {
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {            
-            if (value == null || ((DateTime)value >= Convert.ToDateTime("01/01/1900") && (DateTime)value <= Convert.ToDateTime("12/31/9999")))
+            if (value == null || ((DateOnly)value >= DateOnly.MinValue && (DateOnly)value <= DateOnly.MaxValue))
             {
                 return ValidationResult.Success;
             }

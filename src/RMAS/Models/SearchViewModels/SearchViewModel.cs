@@ -10,10 +10,10 @@ namespace RMAS.Models.SearchViewModels
 {
     public class SearchViewModel
     {    
-        public string EventName { get; set; }
+        public string? EventName { get; set; }
 
         [ValidateSearchDate]
-        public DateTime? EventDate { get; set; }
+        public DateOnly? EventDate { get; set; }
         public List<Event>? SearchResults { get; set; }
     }
 }

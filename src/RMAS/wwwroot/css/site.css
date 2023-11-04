@@ -55,17 +55,24 @@ body{
     background-size: cover;
 }
 
-.bg-transparent{
+/*.main-bg{
 	padding: 10px;
 	background-color: #2F3032;
 	background: rgba(0, 0, 0, 0.8);
 	margin: 20px 0 40px;	
-}
+}*/
 
-.rmas{
+/*.rmas{
     color: white;
-}
+}*/
 
-.navbar-brand{
+/*.navbar-brand{
     font-size: 36px;
+}*/
+
+#datepicker td.date-selected a, td.date-selected span {
+    border: 1px solid #003eff;
+    background: #007fff;
+    font-weight: normal;
+    color: #ffffff;
 }

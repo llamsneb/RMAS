@@ -11,28 +11,7 @@ namespace RMAS.Models.ReserveViewModels
     [ValidateReserveTime]
     public class ReserveViewModel
     {
-        public List<SelectListItem>
-        RoomTypes
-        { get; } = new List<SelectListItem>
-        {
-            new SelectListItem { Value = "Conference", Text = "Conference" },
-            new SelectListItem { Value = "Lab", Text = "Lab" },
-            new SelectListItem { Value = "Class", Text = "Class"  },
-            new SelectListItem { Value = "Office", Text = "Office"  }
-        };
-
-        public List<SelectListItem>
-        DaysOfWeek
-        { get; } = new List<SelectListItem>
-        {
-            new SelectListItem { Value = "", Text = "Sun" },
-            new SelectListItem { Value = "", Text = "Mon" },
-            new SelectListItem { Value = "", Text = "Tues"  },
-            new SelectListItem { Value = "", Text = "Wed"  },
-            new SelectListItem { Value = "", Text = "Thur"  },
-            new SelectListItem { Value = "", Text = "Fri"  },
-            new SelectListItem { Value = "", Text = "Sat"  }
-        };
+        public SelectList? RoomTypes { get; set; }
 
         public List<SelectListItem>
         BeginTimeList
@@ -73,7 +52,7 @@ namespace RMAS.Models.ReserveViewModels
         };
         
         [ValidateReserveDate]
-        public List<DateTime> Dates { get; set; }
+        public List<DateOnly> Dates { get; set; }
 
         [Required]
         public string EventName { get; set; }
@@ -86,5 +65,9 @@ namespace RMAS.Models.ReserveViewModels
 
         [Required]
         public int RoomNumber { get; set; }
+
+        public string? InfoMessage { get; set; }
+
+        public List<Event>? Events { get; set; }
     }
 }

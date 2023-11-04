@@ -6,8 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using RMAS.Interfaces;
 using RMAS.Models;
 
-// For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace RMAS.WebAPIControllers
 {
     [Route("api/[controller]")]
@@ -30,12 +28,10 @@ namespace RMAS.WebAPIControllers
         // GET api/values/5
         [HttpGet("{name}/{date:DateTime?}")]
         [HttpGet("{date:DateTime}")]
-        public IEnumerable<Event> GetEvents(string name = null, DateTime? date = null)
+        public async Task<List<Event>> GetEvents(string name = null, DateOnly? date = null)
 
         {
-            IEnumerable<Event> searchResults;            
-            searchResults = _eventRepository.GetEvents(name, date);
-            return searchResults;
+            return await _eventRepository.GetEvents(name, date);
         }
 
         // POST api/values

@@ -6,41 +6,12 @@ var DateModule = (function () {
         var curr_month = date.getMonth() + 1;
         var curr_date = date.getDate();
         return (curr_year + "-" + curr_month + "-" + curr_date);
-    }
+    } 
 
-    // Format date to be shown in textbox.
-    var boxDate = function (date) {
-        var curr_year = date.getFullYear();
-        var curr_month = date.getMonth() + 1;
-        var curr_date = date.getDate();
-        return (curr_month + "/" + curr_date + "/" + curr_year);
-    }
-
-    var setDateChkboxVals = function (dateText) {
-        var prevSun = new Date(dateText);
-        var d = prevSun.getDay();
-        prevSun.setDate(prevSun.getDate() - d);
-        document.getElementById("date").value = boxDate(prevSun);
-
-        document.getElementById("Sun").value = sqlDate(prevSun);
-        prevSun.setDate(prevSun.getDate() + 1);
-        document.getElementById("Mon").value = sqlDate(prevSun);
-        prevSun.setDate(prevSun.getDate() + 1);
-        document.getElementById("Tues").value = sqlDate(prevSun);
-        prevSun.setDate(prevSun.getDate() + 1);
-        document.getElementById("Wed").value = sqlDate(prevSun);
-        prevSun.setDate(prevSun.getDate() + 1);
-        document.getElementById("Thur").value = sqlDate(prevSun);
-        prevSun.setDate(prevSun.getDate() + 1);
-        document.getElementById("Fri").value = sqlDate(prevSun);
-        prevSun.setDate(prevSun.getDate() + 1);
-        document.getElementById("Sat").value = sqlDate(prevSun);
-    }
-
-    var getRooms = function (roomType) {
+    var getRoomNumbers = function (roomType) {
         let jqxhr = $.ajax({
             type: "POST",
-            url: "/Reserve/GetRooms",
+            url: "/Reserve/GetRoomNumbers",
             data: { 'roomType': roomType },
             //contentType: "application/json; charset=utf-8",
             dataType: "json",
@@ -55,30 +26,55 @@ var DateModule = (function () {
         });
     }
 
+    function addHiddenDate(dateString) {
+        var itemCount = $("input[name='Dates']").length;
+        var dat = $("<input type='hidden' asp-for='Dates' name='Dates' id='Dates[" + itemCount + "]' /> ").val(dateString);
+        $("form#Reserve").append(dat);
+    }
+
     $(document).ready(function () {
-        var defaultDay = new Date();
-        defaultDay.setDate(defaultDay.getDate() - defaultDay.getDay());
-        setDateChkboxVals(defaultDay.toLocaleDateString());
+        let selectedDates = [];
 
         $("#datepicker").datepicker({
-            defaultDate: defaultDay,
             minDate: 0,
-            onSelect: function (dateText) { setDateChkboxVals(dateText) }
-        });
-    });    
+            // Called on date select
+            onSelect: function (dateText, obj) {
+                let dt = sqlDate(new Date(dateText));
+                if (selectedDates.includes(dt)) {
+                    selectedDates = selectedDates.filter(date => date !== dt);
+                    $('input[name="Dates"][value=' + dt +']').remove();
+                    $("div#datepicker td.date-selected.ui-datepicker-current-day").removeClass("date-selected");
+                } else {
+                    addHiddenDate(dt)
+                    selectedDates.push(dt);
+                }
+            },
+            // Called for each date in calendar
+            beforeShowDay: function (date) {
+                for (let i = 0; i < selectedDates.length; i++) {
+                    if (sqlDate(date) == selectedDates[i]) {
+                        return [true, "date-selected"];
+                    }
+                }
+                return [true,''];
+            },
+            // Called before calendar loads
+            onUpdateDatepicker: function (obj) {
+                $("div#datepicker td .ui-state-active").removeClass("ui-state-active");               
+            }            
+        });        
+    });        
 
     // Event Handlers:
     $('#RoomType').change(
         function () {
-            getRooms(this.value)
+            getRoomNumbers(this.value)
         }
     );
 
     // Expose Methods:
     return {
         sqlDate: sqlDate,
-        boxDate: boxDate,
-        setDateChkboxVals: setDateChkboxVals,
-        getRooms: getRooms
+        getRoomNumbers: getRoomNumbers
     };    
 })();

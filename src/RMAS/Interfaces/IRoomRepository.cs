@@ -8,6 +8,6 @@ namespace RMAS.Interfaces
 {
     public interface IRoomRepository
     {
-        List<int> GetRoomNumbers(string roomType);
+        Task <List<Room>> GetRooms();
     }
 }
