@@ -1,71 +1,49 @@
 ﻿@model SearchViewModel
 @{
     ViewBag.Title = "Search";
-    //ViewData["Title"] = "Search";
 }
 
-<h2>@ViewData["Title"]</h2>
+<h2 class="display-6">@ViewData["Title"]</h2>
 
 <form asp-controller="Search" asp-action="Search" method="post" role="form">
-    <div asp-validation-summary="All" class="text-danger"></div>
-    <div class="col-md-4">
-        <div class="row">
-            <h3>Search for Scheduled Event</h3>
-        </div>
-        <div class="row">
-            <div class="form-group">
-                <label asp-for="EventName">Search by Event Name:</label>
-                <span asp-validation-for="EventName"></span>
-                <input asp-for="EventName" class="form-control" type="search" />
+    <div class="row">
+        <div asp-validation-summary="All" class="text-danger"></div>
+    </div>
+    <div class="row">
+        <div class="col-auto">
+            <div class="row">
+                <h3 class="fs-4 fw-normal">Search for Scheduled Event</h3>
             </div>
-        </div>
-        <div class="row">
-            <p>And &#47; Or</p>
-        </div>
-        <div class="row">
-            <div class="form-group">
-                <label asp-for="EventDate">Search by Date (MM/DD/YYYY):</label>
-                <span asp-validation-for="EventDate"></span>
-                <input class="form-control" asp-for="EventDate" type="date" />
+            <div class="row mb-3">
+                <div class="col-auto">
+                    <label asp-for="EventName" class="form-label">by Event Name:</label>
+                    <span asp-validation-for="EventName"></span>
+                    <input asp-for="EventName" class="form-control" type="search" />
+                </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="form-group">
-                <button class="btn btn-primary" type="submit">Search</button>
+            <div class="row">
+                <p>and &#47; or</p>
             </div>
-        </div>
+            <div class="row mb-3">
+                <div class="col-auto">
+                    <label asp-for="EventDate" class="form-label">by Date (MM/DD/YYYY):</label>
+                    <span asp-validation-for="EventDate"></span>
+                    <input class="form-control" asp-for="EventDate" type="date" />
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-auto">
+                    <button class="btn btn-primary" type="submit">Search</button>
+                </div>
+            </div>
+        </div>    
+
+        @if (Model.SearchResults != null)
+        {
+            @await Html.PartialAsync("_EventTable", Model.SearchResults)
+        }
     </div>
 </form>
-
-@if (Model.SearchResults != null)
-{
-    <div class="col-md-8">
-        <h3>Search Results</h3>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Event Name</th>
-                    <th>Room Number</th>
-                    <th>Date</th>
-                    <th>Begin Time</th>
-                    <th>End Time</th>
-                </tr>
-            </thead>
-            <tbody>                            
-                @foreach (Event result in Model.SearchResults)
-                {
-                    <tr>
-                        <td>@result.EventName</td>
-                        <td>@result.RoomNumber</td>
-                        <td>@result.EventDate</td>
-                        <td>@result.BeginTime</td>
-                        <td>@result.EndTime</td>
-                    </tr>
-                }                                    
-            </tbody>
-        </table>
-    </div>
-}
 
 @section Scripts {
 

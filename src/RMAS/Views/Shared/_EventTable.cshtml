@@ -1,0 +1,31 @@
+﻿
+@model List<Event>
+
+<div class="col-auto border-start">
+    <h3 class="fs-4 fw-normal">Search Results</h3>
+    <table class="table table-secondary table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Event Name</th>
+                <th>Room Number</th>
+                <th>Date</th>
+                <th>Begin Time</th>
+                <th>End Time</th>
+                <th>Reserved By</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Event result in Model)
+            {
+                <tr>
+                    <td>@result.EventName</td>
+                    <td>@result.RoomNumber</td>
+                    <td>@result.EventDate</td>
+                    <td>@result.BeginTime</td>
+                    <td>@result.EndTime</td>
+                    <td>@result.User.UserName</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
