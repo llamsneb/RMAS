@@ -20,8 +20,8 @@ namespace RMAS
             // Are both RMAS_dbContext and ApplicationDbContext necessary?
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
             // Remove UseDateOnlyTimeOnly() when EF8 is released
-            builder.Services.AddDbContext<RMAS_dbContext>(options => options.UseSqlServer(connectionString, x => x.UseDateOnlyTimeOnly()));
-            builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
+            builder.Services.AddDbContext<RMAS_dbContext>(options => options.UseLazyLoadingProxies().UseSqlServer(connectionString, x => x.UseDateOnlyTimeOnly()));
+            builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseLazyLoadingProxies().UseSqlServer(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
             // Add framework services.

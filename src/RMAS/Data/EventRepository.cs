@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using RMAS.Interfaces;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -11,24 +12,25 @@ namespace RMAS.Models
     public class EventRepository : IEventRepository
     {
         private readonly RMAS_dbContext _dbContext;
+        
         public EventRepository(RMAS_dbContext dbContext)
         {
-            _dbContext = dbContext;
+            _dbContext = dbContext;            
         }
 
         public async Task<List<Event>> GetEvents(string eventName)
         {
-            return await _dbContext.Event.Where(e => e.EventName == eventName).ToListAsync();           
+            return await _dbContext.Event.Include(e => e.User).Where(e => e.EventName == eventName).ToListAsync();           
         }
 
         public async Task<List<Event>> GetEvents(DateOnly? date)
         {
-            return await _dbContext.Event.Where(e => e.EventDate == date).ToListAsync();
+            return await _dbContext.Event.Include(e => e.User).Where(e => e.EventDate == date).ToListAsync();
         }
 
         public async Task<List<Event>> GetEvents(string eventName, DateOnly? date)
         {
-            return await _dbContext.Event.Where(e => e.EventName == eventName && e.EventDate == date).ToListAsync();
+            return await _dbContext.Event.Include(e => e.User).Where(e => e.EventName == eventName && e.EventDate == date).ToListAsync();
         }
 
         public async Task<List<Event>> GetEvents(int roomNumber, TimeSpan beginTime, TimeSpan endTime, List<DateOnly> dates)
