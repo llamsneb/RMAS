@@ -28,9 +28,13 @@ namespace RMAS.Models
             return await _dbContext.Event.Include(e => e.User).Where(e => e.EventDate == date).ToListAsync();
         }
 
-        public async Task<List<Event>> GetEvents(string eventName, DateOnly? date)
+        public async Task<List<Event>> GetEventsFullCalendar(int roomNumber, DateOnly start, DateOnly end)
         {
-            return await _dbContext.Event.Include(e => e.User).Where(e => e.EventName == eventName && e.EventDate == date).ToListAsync();
+            return await _dbContext.Event.Where(e =>
+                e.RoomNumber == roomNumber
+                && (e.EventDate >= start)
+                && (e.EventDate <= end))
+                .ToListAsync();
         }
 
         public async Task<List<Event>> GetEvents(int roomNumber, TimeSpan beginTime, TimeSpan endTime, List<DateOnly> dates)

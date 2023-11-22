@@ -12,6 +12,7 @@ namespace RMAS.Interfaces
         Task<List<Event>> GetEvents(DateOnly? date);
         Task<List<Event>> GetEvents(string eventName, DateOnly? date);
         Task<List<Event>> GetEvents(int roomNumber, TimeSpan beginTime, TimeSpan endTime, List<DateOnly> dates);
+        Task<List<Event>> GetEventsFullCalendar(int roomNumber, DateOnly start, DateOnly end);
         Task AddEvents(List<Event> eventList);
         Task Save();
     }

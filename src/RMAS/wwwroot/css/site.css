@@ -76,3 +76,13 @@ body{
     font-weight: normal;
     color: #ffffff;
 }
+
+#calendar h2{
+    font-weight: normal;
+}
+
+#calendar a{
+    color: black;
+    font-weight: normal;
+    text-decoration: none;
+}
