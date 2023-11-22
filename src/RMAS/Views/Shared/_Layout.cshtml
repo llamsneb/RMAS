@@ -24,7 +24,7 @@
     <header class="sticky-top">
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm bg-dark mb-3" data-bs-theme="dark">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><h1 class="display-5">RMAS</h1></a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><h1 class="display-6">RMAS</h1></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -47,13 +47,13 @@
     </header>
     <div class="container">
         <main role="main" >
-            <div class="p-4 bg-dark text-white bg-opacity-75 d-inline-block">
-                @RenderBody()
-            </div>
+@*            <div class="p-4 bg-dark text-white bg-opacity-75 d-inline-block">
+*@                @RenderBody()
+            @*</div>*@
         </main>
         <hr />        
     </div>
-    <footer class="footer sticky-bottom bg-dark text-white p-3">
+    <footer class="footer bg-dark text-white p-3">
         <div class="container">
             &copy; 2016 - RMAS
         </div>

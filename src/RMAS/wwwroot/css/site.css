@@ -55,20 +55,9 @@ body{
     background-size: cover;
 }
 
-/*.main-bg{
-	padding: 10px;
-	background-color: #2F3032;
-	background: rgba(0, 0, 0, 0.8);
-	margin: 20px 0 40px;	
-}*/
-
-/*.rmas{
-    color: white;
-}*/
-
-/*.navbar-brand{
-    font-size: 36px;
-}*/
+#search-results .table-container {
+    height: 258px !important;
+}
 
 #datepicker td.date-selected a, td.date-selected span {
     border: 1px solid #003eff;

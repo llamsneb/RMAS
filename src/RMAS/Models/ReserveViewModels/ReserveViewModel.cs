@@ -5,12 +5,20 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
 using RMAS.Models.Validation;
+using RMAS.Models.SearchViewModels;
+using RMAS.Models.BaseViewModels;
 
 namespace RMAS.Models.ReserveViewModels
 {
     [ValidateReserveTime]
-    public class ReserveViewModel
+    public class ReserveViewModel : BaseViewModel
     {
+        public ReserveViewModel() 
+        {
+            Reservations = new List<Reservation>();
+            Events = new List<Event>();
+        }
+
         public SelectList? RoomTypes { get; set; }
 
         public List<SelectListItem>
@@ -66,7 +74,6 @@ namespace RMAS.Models.ReserveViewModels
         [Required]
         public int RoomNumber { get; set; }
 
-        public string? InfoMessage { get; set; }
 
         public List<Event>? Events { get; set; }
     }

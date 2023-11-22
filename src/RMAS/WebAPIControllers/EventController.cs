@@ -26,13 +26,13 @@ namespace RMAS.WebAPIControllers
         }
 
         // GET api/values/5
-        [HttpGet("{name}/{date:DateTime?}")]
-        [HttpGet("{date:DateTime}")]
-        public async Task<List<Event>> GetEvents(string name = null, DateOnly? date = null)
+        //[HttpGet("{name}/{date:DateTime?}")]
+        //[HttpGet("{date:DateTime}")]
+        //public async Task<List<Event>> GetEvents(string name = null, DateOnly? date = null)
 
-        {
-            return await _eventRepository.GetEvents(name, date);
-        }
+        //{
+        //    return await _eventRepository.GetEvents(name, date);
+        //}
 
         // POST api/values
         [HttpPost]

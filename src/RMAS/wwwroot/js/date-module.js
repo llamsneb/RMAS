@@ -6,34 +6,24 @@ var DateModule = (function () {
         var curr_month = date.getMonth() + 1;
         var curr_date = date.getDate();
         return (curr_year + "-" + curr_month + "-" + curr_date);
-    } 
-
-    var getRoomNumbers = function (roomType) {
-        let jqxhr = $.ajax({
-            type: "POST",
-            url: "/Reserve/GetRoomNumbers",
-            data: { 'roomType': roomType },
-            //contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            success: (function (response) {
-                let select = document.getElementById("RoomNumber");
-                select.length = 0;               
-
-                response.forEach(function (num) {
-                    select.options.add(new Option(num));
-                })
-            })
-        });
-    }
+    }     
 
     function addHiddenDate(dateString) {
         var itemCount = $("input[name='Dates']").length;
         var dat = $("<input type='hidden' asp-for='Dates' name='Dates' id='Dates[" + itemCount + "]' /> ").val(dateString);
         $("form#Reserve").append(dat);
-    }
+    }    
 
     $(document).ready(function () {
         let selectedDates = [];
+        //Persist dates after submit
+        let hiddenDates = $('input[name="Dates"]');
+        if (hiddenDates.length > 0) {
+            for (let i = 0; i < hiddenDates.length; i++) 
+            {
+                selectedDates.push(hiddenDates[i].value);
+            };
+        }
 
         $("#datepicker").datepicker({
             minDate: 0,
@@ -65,16 +55,41 @@ var DateModule = (function () {
         });        
     });        
 
-    // Event Handlers:
-    $('#RoomType').change(
+    // Event Handlers:  
+    $("#search-results").on("click", "#select-all",
         function () {
-            getRoomNumbers(this.value)
-        }
-    );
+            $("input[type=checkbox]").prop('checked', $(this).prop('checked'));
+        });
+
+    $('#search-results').on("change", 'input.form-check-input', function () {
+        $('#cancelButton').prop('disabled', $('td input.form-check-input').filter(':checked').length < 1);
+    });    
+
+    $('#search-results').on("click", "#previousButton, #nextButton",function () {    
+        $.ajax({
+            type: "POST",
+            url: $(this).data('url'),
+            data: {
+                'dates': $(this).data('dates'),
+                'roomNumber': $(this).data('roomnumber'),
+                'beginTime': $(this).data('begintime'),
+                'endTime': $(this).data('endtime'),
+                'eventName': $(this).data('eventname'),
+                'eventDate': $(this).data('eventdate'),
+                'pageNumber': $(this).data('pagenumber') //pass as string
+            }
+        })
+        .success(function (result, status) {
+            $("#search-results").html(result);
+        })
+        .error(function (xhr, textStatus, errorThrown) {
+            alert('there was an error while fetching events!');
+        });
+    });
+
 
     // Expose Methods:
     return {
         sqlDate: sqlDate,
-        getRoomNumbers: getRoomNumbers
     };    
 })();

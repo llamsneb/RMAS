@@ -3,82 +3,96 @@
     ViewBag.Title = "Reserve";
 }
 
-<h2 class="display-6">@ViewData["Title"]</h2>
+<div class="p-4 bg-dark text-white bg-opacity-75 d-inline-block">
+    <h2 class="display-6">@ViewData["Title"]</h2>
 
-<form asp-controller="Reserve" asp-action="Reserve" id="Reserve" method="post" role="form">
-    <div class="row mb-3">
-        @if (!ViewData.ModelState.IsValid)
+    <form asp-controller="Reserve" asp-action="Reserve" id="Reserve" method="post" role="form">
+        @if (Model.Dates != null)
         {
-            <div class="col" >
-                <div asp-validation-summary="All" class="pt-3 pe-3 bg-danger-subtle text-danger fw-semibold rounded-3 border border-danger"></div>
-            </div>
+            @for (int i = 0; i < Model.Dates.Count ; i++)
+            {
+                <input type='hidden' asp-for='Dates' name='Dates' id="Dates[@i]" value="@Model.Dates[i].ToString("yyyy-MM-dd")" />
+            }
         }
-        @if(!String.IsNullOrWhiteSpace(Model.InfoMessage))
-        {
-            <div class="col">
-                <div class="pt-3 pe-3 bg-primary-subtle text-primary fw-semibold rounded-3 border border-primary">
-                    <ul>
-                        <li>@Model.InfoMessage</li>
-                    </ul>
+        <div class="row mb-3">
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div class="col" >
+                    <div asp-validation-summary="All" class="pt-3 pe-3 bg-danger-subtle text-danger fw-semibold rounded-3 border border-danger"></div>
+                </div>
+            }
+            @if(!String.IsNullOrWhiteSpace(Model.InfoMessage))
+            {
+                <div class="col">
+                    <div class="pt-3 pe-3 bg-primary-subtle text-primary fw-semibold rounded-3 border border-primary">
+                        <ul>
+                            <li>@Model.InfoMessage</li>
+                        </ul>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="row">
+            <div class="col-auto ">
+                <div class="row mb-3">
+                    <div class="col-auto">
+                        <label for="date" class="form-label">Pick dates:</label>
+                        <div class="calendar" id="datepicker"></div>                        
+                    </div>
                 </div>
             </div>
-        }
-    </div>
-    <div class="row">
-        <div class="col-auto ">
-            <div class="row mb-3">
-                <div class="col-auto">
-                    <label for="date" class="form-label">Pick dates:</label>
-                    <div class="calendar" id="datepicker"></div>
+            <div class="col-auto">
+                <div class="row mb-3">
+                    <div class="col-auto">
+                        <label asp-for="RoomTypes" class="form-label">Room Type:</label>
+                        <select class="form-select" id="RoomType" asp-items="Model.RoomTypes">
+                            <option value=""></option>
+                        </select>
+                    </div>
+                    <div class="col-auto">
+                        <label asp-for="RoomNumber" class="form-label">Room Number:</label>
+                        <select class="form-select" asp-for="RoomNumber">
+                            <option value="@Model.RoomNumber"></option>
+                        </select>
+                    </div>
+                </div>            
+                <div class="row mb-3">
+                    <div class="col-auto">
+                        <label asp-for="BeginTime" class="form-label">Begin Time:</label>
+                        <select asp-for="BeginTime" class="form-select" id="BeginTime" asp-items="Model.BeginTimeList">
+                            <option value="@Model.BeginTime">Select Time</option>
+                        </select>
+                    </div>
+                    <div class="col-auto">
+                        <label asp-for="EndTime" class="form-label">End Time:</label>
+                        <select asp-for="EndTime" class="form-select" id="EndTime" asp-items="Model.EndTimeList">
+                            <option value="@Model.EndTime">Select Time</option>
+                        </select>
+                    </div>
                 </div>
+                <div class="row mb-3">
+                    <div class="col-auto">
+                        <label asp-for="EventName" class="form-label">Event Name:</label>
+                        <input asp-for="EventName" class="form-select" type="text" value="@Model.EventName" />
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-auto">
+                        <button class="btn btn-primary" type="submit">Reserve</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col ms-3">
+                <div id="search-results" class="row">
+                    @if (Model.ReservationsPage != null && Model.ReservationsPage.Any())
+                    {                    
+                        @await Html.PartialAsync("_EventTable", Model.ReservationsPage)                                       
+                    }
+                </div>                
             </div>
         </div>
-        <div class="col-auto">
-            <div class="row mb-3">
-                <div class="col-auto">
-                    <label asp-for="RoomTypes" class="form-label">Room Type:</label>
-                    <select class="form-select" id="RoomType" asp-items="Model.RoomTypes">
-                        <option value=""></option>
-                    </select>
-                </div>
-                <div class="col-auto">
-                    <label asp-for="RoomNumber" class="form-label">Room Number:</label>
-                    <select class="form-select" asp-for="RoomNumber"></select>
-                </div>
-            </div>            
-            <div class="row mb-3">
-                <div class="col-auto">
-                    <label asp-for="BeginTime" class="form-label">Begin Time:</label>
-                    <select asp-for="BeginTime" class="form-select" id="RoomType" asp-items="Model.BeginTimeList">
-                        <option value="">Select Time</option>
-                    </select>
-                </div>
-                <div class="col-auto">
-                    <label asp-for="EndTime" class="form-label">End Time:</label>
-                    <select asp-for="EndTime" class="form-select" id="RoomType" asp-items="Model.EndTimeList">
-                        <option value="">Select Time</option>
-                    </select>
-                </div>
-            </div>
-            <div class="row mb-3">
-                <div class="col-auto">
-                    <label asp-for="EventName" class="form-label">Event Name:</label>
-                    <input asp-for="EventName" class="form-select" type="text" />
-                </div>
-            </div>
-            <div class="row mb-3">
-                <div class="col-auto">
-                    <button class="btn btn-primary" type="submit">Reserve</button>
-                </div>
-            </div>
-        </div>
-        @if (Model.Events != null)
-        {
-            @await Html.PartialAsync("_EventTable", Model.Events)
-        }
-    </div>
-</form>
-
-@section Scripts {
-    <script src="~/js/date-module.js"></script>
+    </form>
+</div>
+@section Scripts {    
+    <script src="~/js/date-module.js"></script>    
 }

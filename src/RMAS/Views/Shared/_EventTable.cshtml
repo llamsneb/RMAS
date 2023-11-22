@@ -1,31 +1,120 @@
-﻿
-@model List<Event>
+﻿@using RMAS.Models.BaseViewModels
+@model PaginatedList<BaseViewModel.Reservation>
 
-<div class="col-auto border-start">
+<div class="row ps-2 border-start">
     <h3 class="fs-4 fw-normal">Search Results</h3>
-    <table class="table table-secondary table-striped table-hover">
-        <thead>
-            <tr>
-                <th>Event Name</th>
-                <th>Room Number</th>
-                <th>Date</th>
-                <th>Begin Time</th>
-                <th>End Time</th>
-                <th>Reserved By</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (Event result in Model)
-            {
+    <div class="table-container position-relative overflow-y-auto mb-3">
+        <table class="table table-secondary table-striped table-hover">
+            <thead class="sticky-top">
                 <tr>
-                    <td>@result.EventName</td>
-                    <td>@result.RoomNumber</td>
-                    <td>@result.EventDate</td>
-                    <td>@result.BeginTime</td>
-                    <td>@result.EndTime</td>
-                    <td>@result.User.UserName</td>
+                    @if (ViewContext.RouteData.Values["controller"].ToString() == "Search")
+                    {
+                        <th>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="select-all">
+                            </div>
+                        </th>
+                    }
+                    <th>Event Name</th>
+                    <th>Room Number</th>
+                    <th>Date</th>
+                    <th>Begin Time</th>
+                    <th>End Time</th>
+                    <th>Reserved By</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @{
+                    int i = 0;
+                    foreach (BaseViewModel.Reservation result in Model)
+                    @*@for(int i = 0; i < Model.Count(); i++)*@
+                    {
+
+                        <tr>
+                            @if (ViewContext.RouteData.Values["controller"].ToString() == "Search")
+                            {
+                                <td>
+                                    @if (@Model[i].Event.UserId == ViewData["UserId"].ToString())
+                                    {
+                                        <div class="form-check">
+                                            <input class="form-check-input" name="Reservations[@i].IsChecked" asp-for="@Model[i].IsChecked" type="checkbox" id="Event_@i" />
+                                            <input name="Reservations[@i].EventName" asp-for="@Model[i].Event.EventName" type="hidden" value="@Model[i].Event.EventName" />
+                                            <input name="Reservations[@i].Event.RoomNumber" asp-for="@Model[i].Event.RoomNumber" type="hidden" value="@Model[i].Event.RoomNumber" />
+                                            <input name="Reservations[@i].Event.EventDate" asp-for="@Model[i].Event.EventDate" type="hidden" value="@Model[i].Event.EventDate" />
+                                            <input name="Reservations[@i].Event.BeginTime" asp-for="@Model[i].Event.BeginTime" type="hidden" value="@Model[i].Event.BeginTime" />
+                                            <input name="Reservations[@i].Event.EndTime" asp-for="@Model[i].Event.EndTime" type="hidden" value="@Model[i].Event.EndTime" />
+                                            <input name="Reservations[@i].Event.UserId" asp-for="@Model[i].Event.UserId" type="hidden" value="@Model[i].Event.UserId" />
+                                        </div>
+                                    }
+                                </td>
+                            }
+                            <td id="EventName_@i">@Model[i].Event.EventName</td>
+                            <td id="RoomNumber_@i">@Model[i].Event.RoomNumber</td>
+                            <td id="EventDate_@i">@Model[i].Event.EventDate</td>
+                            <td id="BeginTime_@i">@TimeOnly.FromTimeSpan(Model[i].Event.BeginTime).ToShortTimeString()</td>
+                            <td id="EndTime_@i">@TimeOnly.FromTimeSpan(Model[i].Event.EndTime).ToShortTimeString()</td>
+                            <td id="UserName_@i" value="@Model[i].Event.UserId">@Model[i].Event.User.UserName</td>
+                        </tr>
+                        i++;
+                    }
+                }
+            </tbody>
+            </table>
+    </div>
+</div>
+<div class="row">
+    <div class="col-auto ps-4 mb-3">
+        @{
+            var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+            var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+        }
+
+        @if (ViewContext.RouteData.Values["controller"].ToString() == "Reserve")
+        {
+            <a data-pageNumber="@(Model.PageIndex - 1)"
+                data-url="@ViewData["Url"]"
+                data-RoomNumber="@ViewData["RoomNumber"]"
+                data-BeginTime="@ViewData["BeginTime"]"
+                data-EndTime="@ViewData["EndTime"]"
+                data-Dates=@Html.Raw(Json.Serialize(ViewData["Dates"]))
+                id="previousButton" class="btn btn-secondary @prevDisabled">
+                Previous
+            </a>    
+            <a data-pageNumber="@(Model.PageIndex + 1)"
+                data-url="@ViewData["Url"]"
+                data-RoomNumber="@ViewData["RoomNumber"]"
+                data-BeginTime="@ViewData["BeginTime"]"
+                data-EndTime="@ViewData["EndTime"]"
+                data-Dates=@Html.Raw(Json.Serialize(ViewData["Dates"]))
+                id="nextButton" class="btn btn-secondary @nextDisabled">
+                Next
+            </a>
+        }
+
+        @if (ViewContext.RouteData.Values["controller"].ToString() == "Search")
+        {
+            <a data-pageNumber="@(Model.PageIndex - 1)"
+                data-url="@ViewData["Url"]"
+                data-EventName="@ViewData["EventName"]"
+                data-EventDate="@ViewData["EventDate"]"
+                id="previousButton" class="btn btn-secondary @prevDisabled">
+                Previous
+            </a>
+            <a data-pageNumber="@(Model.PageIndex + 1)"
+                data-url="@ViewData["Url"]"
+                data-EventName="@ViewData["EventName"]"
+                data-EventDate="@ViewData["EventDate"]"
+                id="nextButton" class="btn btn-secondary @nextDisabled">
+                Next
+            </a>
+        }
+    </div>
+    @if (ViewContext.RouteData.Values["controller"].ToString() == "Search")
+    {
+        <div class="row">
+            <div class="col-auto ps-4 mb-3">
+                <button type="button" disabled id="cancelButton" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#cancelModal">Cancel Selected</button>
+            </div>
+        </div>
+    }
 </div>

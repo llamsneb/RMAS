@@ -12,6 +12,11 @@ using System.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Logging;
+using RMAS.Models.BaseViewModels;
+using System.Drawing.Printing;
+using System.Globalization;
+using Microsoft.AspNetCore.Routing;
 
 namespace RMAS.Controllers
 {
@@ -43,14 +48,38 @@ namespace RMAS.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Reserve(ReserveViewModel model)
+        public async Task<IActionResult> ResultsPage(int roomNumber, TimeSpan beginTime, TimeSpan endTime, List<DateOnly> dates, int? pageNumber)
         {
-            if (ModelState.IsValid)
+            ViewData["Dates"] = dates;
+            ViewData["RoomNumber"] = roomNumber;
+            ViewData["BeginTime"] = beginTime;
+            ViewData["EndTime"] = endTime;
+            ViewData["Url"] = Url.Action("ResultsPage", "Reserve");
+            int pageSize = 10;
+            IQueryable<BaseViewModel.Reservation> events = _eventRepository.GetEvents(roomNumber, beginTime, endTime, dates);
+            return PartialView("_EventTable", await PaginatedList<BaseViewModel.Reservation>.CreateAsync(events.AsNoTracking(), pageNumber ?? 1, pageSize));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Reserve(ReserveViewModel model, int? pageNumber)
+        {
+            if(pageNumber != null)
             {
-                model.Events = await _eventRepository.GetEvents(model.RoomNumber, model.BeginTime, model.EndTime, model.Dates);
-               
-                if (!model.Events.IsNullOrEmpty())
+                ViewData["Dates"] = model.Dates;
+                ViewData["RoomNumber"] = model.RoomNumber;
+                ViewData["BeginTime"] = model.BeginTime;
+                ViewData["EndTime"] = model.EndTime;
+                ViewData["Url"] = Url.Action("ResultsPage", "Reserve");
+                int pageSize = 10;
+                IQueryable<BaseViewModel.Reservation> events = _eventRepository.GetEvents(model.RoomNumber, model.BeginTime, model.EndTime, model.Dates);
+                model.ReservationsPage = await PaginatedList<BaseViewModel.Reservation>.CreateAsync(events.AsNoTracking(), pageNumber ?? 1, pageSize);                
+            }
+            else if (ModelState.IsValid)
+            {                
+                var evts = await _eventRepository.GetEvents(model.RoomNumber, model.BeginTime, model.EndTime, model.Dates).AnyAsync();
+
+                if (evts)
                 {
                     ModelState.AddModelError(string.Empty, "Unable to save changes due to conflict with prior scheduled events. Use the Search page to check availability.");
                 }
@@ -74,19 +103,28 @@ namespace RMAS.Controllers
                         await _eventRepository.AddEvents(model.Events);
                         await _eventRepository.Save();
                         model.InfoMessage = "Reservation completed successfully.";
+
+                        ViewData["Dates"] = model.Dates;
+                        ViewData["RoomNumber"] = model.RoomNumber;
+                        ViewData["BeginTime"] = model.BeginTime;
+                        ViewData["EndTime"] = model.EndTime;
+                        ViewData["Url"] = Url.Action("ResultsPage", "Reserve");
+                        int pageSize = 10;
+                        IQueryable<BaseViewModel.Reservation> events = _eventRepository.GetEvents(model.RoomNumber, model.BeginTime, model.EndTime, model.Dates);
+                        model.ReservationsPage = await PaginatedList<BaseViewModel.Reservation>.CreateAsync(events.AsNoTracking(), pageNumber ?? 1, pageSize);                      
                     }
                     catch (DbUpdateException)
                     {
                         ModelState.AddModelError(string.Empty, "Unable to save changes. Try again, and if the problem persists contact your system administrator.");
                     }
-                }                
+                }
             }
+
             model.RoomTypes = await GetRoomTypes();
             return View(model);
         }
 
         [HttpPost]
-        //[ValidateAntiForgeryToken]
         public async Task<JsonResult> GetRoomNumbers(string roomType)
         {
             List<Room> rooms = await _roomRepository.GetRooms();
