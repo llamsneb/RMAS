@@ -27,6 +27,10 @@
         "themes/base/images/ui-icons_cc0000_256x240.png",
         "themes/base/images/ui-icons_ffffff_256x240.png"
       ]
+    },
+    {
+      "library": "fullcalendar@6.1.9",
+      "destination": "wwwroot/lib/fullcalendar/"
     }
   ]
 }
