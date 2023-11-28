@@ -46,6 +46,10 @@
                                             <input name="Reservations[@i].Event.UserId" asp-for="@Model[i].Event.UserId" type="hidden" value="@Model[i].Event.UserId" />
                                         </div>
                                     }
+                                    else
+                                    {
+                                        <input name="Reservations[@i].IsChecked" asp-for="@Model[i].IsChecked" type="hidden" id="Event_@i" value="false" />
+                                    }
                                 </td>
                             }
                             <td id="EventName_@i">@Model[i].Event.EventName</td>
@@ -53,7 +57,7 @@
                             <td id="EventDate_@i">@Model[i].Event.EventDate</td>
                             <td id="BeginTime_@i">@TimeOnly.FromTimeSpan(Model[i].Event.BeginTime).ToShortTimeString()</td>
                             <td id="EndTime_@i">@TimeOnly.FromTimeSpan(Model[i].Event.EndTime).ToShortTimeString()</td>
-                            <td id="UserName_@i" value="@Model[i].Event.UserId">@Model[i].Event.User.UserName</td>
+                            <td id="UserName_@i">@Model[i].Event.User.UserName</td>
                         </tr>
                         i++;
                     }

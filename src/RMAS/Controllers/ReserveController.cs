@@ -62,29 +62,19 @@ namespace RMAS.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Reserve(ReserveViewModel model, int? pageNumber)
+        public async Task<IActionResult> Reserve(ReserveViewModel model)
         {
-            if(pageNumber != null)
-            {
-                ViewData["Dates"] = model.Dates;
-                ViewData["RoomNumber"] = model.RoomNumber;
-                ViewData["BeginTime"] = model.BeginTime;
-                ViewData["EndTime"] = model.EndTime;
-                ViewData["Url"] = Url.Action("ResultsPage", "Reserve");
-                int pageSize = 10;
-                IQueryable<BaseViewModel.Reservation> events = _eventRepository.GetEvents(model.RoomNumber, model.BeginTime, model.EndTime, model.Dates);
-                model.ReservationsPage = await PaginatedList<BaseViewModel.Reservation>.CreateAsync(events.AsNoTracking(), pageNumber ?? 1, pageSize);                
-            }
-            else if (ModelState.IsValid)
+            if (ModelState.IsValid)
             {                
-                var evts = await _eventRepository.GetEvents(model.RoomNumber, model.BeginTime, model.EndTime, model.Dates).AnyAsync();
+                var evtsExisting = await _eventRepository.GetEvents(model.RoomNumber, model.BeginTime, model.EndTime, model.Dates).AnyAsync();
 
-                if (evts)
+                if (evtsExisting)
                 {
                     ModelState.AddModelError(string.Empty, "Unable to save changes due to conflict with prior scheduled events. Use the Search page to check availability.");
                 }
                 else
                 {
+                    List<Event> eventsNew = new List<Event>();
                     foreach (DateOnly date in model.Dates)
                     {
                         Event evt = new Event();
@@ -95,12 +85,12 @@ namespace RMAS.Controllers
                         evt.BeginTime = TimeSpan.Parse(model.BeginTime.ToString());
                         evt.EndTime = TimeSpan.Parse(model.EndTime.ToString());
 
-                        model.Events.Add(evt);
+                        eventsNew.Add(evt);
                     }
 
                     try
                     {
-                        await _eventRepository.AddEvents(model.Events);
+                        await _eventRepository.AddEvents(eventsNew);
                         await _eventRepository.Save();
                         model.InfoMessage = "Reservation completed successfully.";
 
@@ -109,6 +99,7 @@ namespace RMAS.Controllers
                         ViewData["BeginTime"] = model.BeginTime;
                         ViewData["EndTime"] = model.EndTime;
                         ViewData["Url"] = Url.Action("ResultsPage", "Reserve");
+                        int? pageNumber = 1;
                         int pageSize = 10;
                         IQueryable<BaseViewModel.Reservation> events = _eventRepository.GetEvents(model.RoomNumber, model.BeginTime, model.EndTime, model.Dates);
                         model.ReservationsPage = await PaginatedList<BaseViewModel.Reservation>.CreateAsync(events.AsNoTracking(), pageNumber ?? 1, pageSize);                      

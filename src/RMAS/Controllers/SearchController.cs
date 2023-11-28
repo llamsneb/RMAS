@@ -22,8 +22,6 @@ using NUglify.Helpers;
 using Microsoft.Extensions.Logging;
 using System.Drawing.Printing;
 
-// For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace RMAS.Controllers
 {
     [Authorize]
@@ -64,7 +62,7 @@ namespace RMAS.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Search(SearchViewModel model, int? pageNumber)
+        public async Task<IActionResult> Search(SearchViewModel model)
         {
             if (ModelState.IsValid)
             {               
@@ -72,7 +70,8 @@ namespace RMAS.Controllers
                 {
                     model.EventDate = DateOnly.FromDateTime(DateTime.Now);
                 }
-                
+
+                int? pageNumber = 1;
                 int pageSize = 10;
                 IQueryable<BaseViewModel.Reservation> events = _eventRepository.GetEvents(model.EventName, model.EventDate);
                 model.ReservationsPage = await PaginatedList<BaseViewModel.Reservation>.CreateAsync(events.AsNoTracking(), pageNumber ?? 1, pageSize);
@@ -92,7 +91,7 @@ namespace RMAS.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Cancel(SearchViewModel model, int? pageNumber)
+        public async Task<IActionResult> Cancel(SearchViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -125,6 +124,7 @@ namespace RMAS.Controllers
             ViewData["Url"] = Url.Action("ResultsPage", "Search");
             ViewData["UserId"] = _userManager.GetUserId(User);
 
+            int? pageNumber = 1;
             int pageSize = 10;
             IQueryable<BaseViewModel.Reservation> events = _eventRepository.GetEvents(model.EventName, model.EventDate);
             model.ReservationsPage = await PaginatedList<BaseViewModel.Reservation>.CreateAsync(events.AsNoTracking(), pageNumber ?? 1, pageSize);

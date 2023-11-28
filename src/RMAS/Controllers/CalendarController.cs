@@ -25,6 +25,7 @@ namespace RMAS.Controllers
 
         public async Task<IActionResult> Calendar()
         {
+
             CalendarViewModel model = new CalendarViewModel();
             model.RoomTypes = await GetRoomTypes();
             model.Events = await _eventRepository.GetEvents();

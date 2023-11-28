@@ -2,10 +2,16 @@ var DateModule = (function () {
 
     // Format date for SQL insert.
     var sqlDate = function (date) {
-        var curr_year = date.getFullYear();
-        var curr_month = date.getMonth() + 1;
-        var curr_date = date.getDate();
-        return (curr_year + "-" + curr_month + "-" + curr_date);
+        var year = date.getFullYear();
+        var month = date.getMonth() + 1;
+        var day = date.getDate();
+
+        if (month.length < 2)
+            month = '0' + month;
+        if (day.length < 2)
+            day = '0' + day;
+
+        return [year, month, day].join('-');
     }     
 
     function addHiddenDate(dateString) {
@@ -17,13 +23,13 @@ var DateModule = (function () {
     $(document).ready(function () {
         let selectedDates = [];
         //Persist dates after submit
-        let hiddenDates = $('input[name="Dates"]');
-        if (hiddenDates.length > 0) {
-            for (let i = 0; i < hiddenDates.length; i++) 
-            {
-                selectedDates.push(hiddenDates[i].value);
-            };
-        }
+        //let hiddenDates = $('input[name="Dates"]');
+        //if (hiddenDates.length > 0) {
+        //    for (let i = 0; i < hiddenDates.length; i++) 
+        //    {
+        //        selectedDates.push(hiddenDates[i].value);
+        //    };
+        //}
 
         $("#datepicker").datepicker({
             minDate: 0,

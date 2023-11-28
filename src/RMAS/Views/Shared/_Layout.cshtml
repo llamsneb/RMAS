@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - RMAS</title>
+    <title>@ViewData["Title"] - RMA</title>
 
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/jquery-ui/themes/base/jquery-ui.css" />
@@ -24,7 +24,7 @@
     <header class="sticky-top">
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm bg-dark mb-3" data-bs-theme="dark">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><h1 class="display-6">RMAS</h1></a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><h1 class="display-6">RMA</h1></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -46,16 +46,20 @@
         </nav>
     </header>
     <div class="container">
-        <main role="main" >
-@*            <div class="p-4 bg-dark text-white bg-opacity-75 d-inline-block">
-*@                @RenderBody()
-            @*</div>*@
+        <main role="main" >            
+            @{
+                var titles = new List<string> { "About", "Contact", "Reserve", "Search" };
+                string bodyStyle = titles.Contains(ViewData["Title"]) ? "d-inline-block" : string.Empty;
+            }
+            <div class="p-4 bg-dark text-white bg-opacity-75 @bodyStyle">
+                @RenderBody()
+            </div>
         </main>
         <hr />        
     </div>
     <footer class="footer bg-dark text-white p-3">
         <div class="container">
-            &copy; 2016 - RMAS
+            &copy; 2016 - RMA
         </div>
     </footer>
 
@@ -71,8 +75,8 @@
                 asp-fallback-test="window.jQuery">
         </script>
         <script src="https://ajax.aspnetcdn.com/ajax/jquery.ui/1.12.1/jquery-ui.min.js"
-        asp-fallback-src="~/lib/jquery-ui/jquery-ui.js"
-        asp-fallback-test="window.jQuery.ui">
+            asp-fallback-src="~/lib/jquery-ui/jquery-ui.js"
+            asp-fallback-test="window.jQuery.ui">
         </script>
         <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/bootstrap.min.js"
                 asp-fallback-src="~/lib/bootstrap/js/bootstrap.min.js"

@@ -11,11 +11,6 @@ namespace RMAS.Models.SearchViewModels
 {
     public class SearchViewModel : BaseViewModel
     {
-        public SearchViewModel()
-        {
-            Reservations = new List<Reservation>();
-        }
-
         [ValidateSearchDate]
         public DateOnly? EventDate { get; set; }
     }

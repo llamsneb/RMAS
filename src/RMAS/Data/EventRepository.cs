@@ -79,8 +79,8 @@ namespace RMAS.Models
                 .Include(e => e.User)
                 .Where(e => 
                 e.RoomNumber == roomNumber 
-                && (e.BeginTime == beginTime 
-                && e.EndTime == endTime) 
+                && (e.BeginTime >= beginTime 
+                && e.EndTime <= endTime) 
                 && dates.Contains(e.EventDate))
                 .OrderBy(e => e.EventDate)
                 .ThenBy(e => e.BeginTime)
