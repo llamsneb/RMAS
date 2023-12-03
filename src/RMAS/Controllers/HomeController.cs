@@ -42,7 +42,7 @@ namespace RMAS.Controllers
 
             //ViewData["Message"] = "Your application description page.";            
 
-            ViewData["Message"] = "I created this application based on an assignment in college. The concept of the which is a simple room reservation system for a business. It was originally written in PHP, but I have since updated it to C# ASP.NET Core MVC and expanded it's features. I use it as a way to practice implementing new skills, such as technologies or patterns. And also to keep up to date with changes to the latest framework versions.";
+            ViewData["Message"] = "I created this application based on an assignment in college. The concept of the which is a simple room reservation system for an organization. It was originally written in PHP, but I have since updated it to C# ASP.NET Core MVC and expanded it's features. I use it as a way to practice implementing new skills, such as technologies or patterns. And also to keep up to date with changes to the latest framework versions.";
             return View();
         }
 
