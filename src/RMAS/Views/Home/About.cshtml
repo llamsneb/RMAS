@@ -21,6 +21,10 @@
             <li>Microsoft Identity Platform</li></a>
         <a href="https://www.microsoft.com/en-us/sql-server/" class="link-light link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">
             <li>SQLServer</li></a>
+        <a href="https://github.com/llamsneb/RMAS" class="link-light link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">
+            <li>Github</li></a>
+        <a href="https://azure.microsoft.com/en-us/products/app-service" class="link-light link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">
+            <li>Azure App Service</li></a>
         <a href="https://jquery.com/" class="link-light link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">
             <li>JQuery</li></a>
         <a href="https://jqueryui.com/" class="link-light link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">
@@ -31,36 +35,3 @@
             <li>Bootstrap</li></a>
     </ul>
 </div>
-
-@section Scripts {
-   @* <script>
-        $(document).ready(function () {
-            function showText(setTarget, setMessage, setIndex, setInterval) {
-                var r = $.Deferred();
-                var doShowText = function (target, message, index, interval) {
-                    if (index < message.length) {
-                        $(target).append(message[index++]);
-                        setTimeout(function () {
-                            doShowText(target, message, index, interval);
-                        }, interval);
-                    }
-                    else {
-                        r.resolve();
-                    }
-                };
-
-                doShowText(setTarget, setMessage, setIndex, setInterval);
-                return r.promise();
-            }
-
-            var text = '@Html.Raw(ViewData["Message"])';
-            showText("#about", text, 0, 15);
-            //showText(".about", text, 0, 15).then(function () {
-            //    $('.about').append('<br /><br />');
-            //    var text2 = "Currently, I maintain and add new functionality to websites for Benefit Plan Enrollments. One site provides client companies with an interface to setup and select benefits for their employees. Another site allows company employees to elect the benefits they want for themselves. This involves implementing the complex rules and regulations necessary in this industry.";
-            //    showText(".about p", text2, 0, 15);
-            //});
-        });
-
-    </script>*@
-}
